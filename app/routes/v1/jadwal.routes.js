@@ -8,5 +8,6 @@ module.exports = (route) =>{
     route.get("/jadwal/:id", jadwal.findOne)  //get jadwal by id
     route.put("/jadwal/:id", jadwal.update)  //update jadwal
     route.delete("jadwal/:id", jadwal.delete)  //delete jadwal 
+    route.put("/jadwal/change_status/:id", jadwal.changeStatus)  //update jadwal
 
 }

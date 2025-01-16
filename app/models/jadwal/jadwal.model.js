@@ -6,6 +6,11 @@ module.exports = mongoose => {
             description: String,
             start_date: String,
             end_date: String,
+            status:{
+                type: String,
+                enum: ['belum selesai', 'selesai'],
+                default: 'belum selesai'
+            }
         },
         { timestamps: true }
     )

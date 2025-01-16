@@ -36,20 +36,20 @@ exports.findAll = (req, res) => {
 // Find jadwal by id
 exports.findOne = (req, res) => {
     Jadwal.findById(req.params.id)
-    .then(data => {
-        if (!data) {
-            return res.status(404).send({ message: "Jadwal not found with id " + req.params.id });
-        }
-        res.send({
-            message: "Success get jadwal",
-            datas: data
-        });
-    }).catch(err => {
-        if (err.kind === 'ObjectId') {
-            return res.status(404).send({ message: "Jadwal not found with id " + req.params.id });
-        }
-        return res.status(500).send({ message: "Error retrieving Jadwal with id " + req.params.id });
-    })
+        .then(data => {
+            if (!data) {
+                return res.status(404).send({ message: "Jadwal not found with id " + req.params.id });
+            }
+            res.send({
+                message: "Success get jadwal",
+                datas: data
+            });
+        }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                return res.status(404).send({ message: "Jadwal not found with id " + req.params.id });
+            }
+            return res.status(500).send({ message: "Error retrieving Jadwal with id " + req.params.id });
+        })
 }
 
 // Update jadwal by id
@@ -85,5 +85,37 @@ exports.delete = (req, res) => {
             return res.status(404).send({ message: "Jadwal not found with id " + req.params.id });
         }
         return res.status(500).send({ message: "Could not delete Jadwal with id " + req.params.id });
+    })
+}
+
+
+// mengubah status jadwal
+exports.changeStatus = async (req, res) => {
+
+    let statusJadwal = await Jadwal.findById(req.params.id);
+
+    if (!statusJadwal) {
+        return res.status(404).send({ message: "Jadwal tidak ditemukan " });
+    }
+
+    if (statusJadwal.status === 'selesai') {
+        statusJadwal.status = 'belum selesai';
+    } else {
+        statusJadwal.status = 'selesai';
+    }
+
+    Jadwal.findByIdAndUpdate(req.params.id, { status: statusJadwal.status }, { useFindAndModify: false }).then(data => {
+        if (!data) {
+            return res.status(404).send({ message: "Jadwal tidak ditemukan " + req.params.id });
+        }
+        res.send({
+            message: "update status jadwal",
+            data: data
+        });
+    }).catch(err => {
+        if (err.kind === 'ObjectId') {
+            return res.status(404).send({ message: "Jadwal tidak ditemukan " + req.params.id });
+        }
+        return res.status(500).send({ message: "Error Update Jadwal "});
     })
 }
